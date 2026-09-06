@@ -60,8 +60,8 @@ async def sso_and_visitor_middleware(request: Request, call_next):
     if request.method == "GET" and path == "/":
         visitors_count += 1
 
-    # Sağlık kontrolü ve SSO rotalarını hariç tut
-    if path == "/auth/sso" or path == "/health" or path.startswith("/api/health"):
+    # Sağlık kontrolü, SSO ve API rotalarını hariç tut (API rotaları DashboardAuthMiddleware tarafından korunur)
+    if path == "/auth/sso" or path == "/health" or path.startswith("/api"):
         response = await call_next(request)
         response.headers["X-Visitor-Count"] = str(visitors_count)
         return response

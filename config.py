@@ -21,9 +21,10 @@ PAPER_TRADING = True  # Must always be True; guards against accidental live trad
 INITIAL_BALANCE = _float("INITIAL_BALANCE", 1_000)   # USDT, split across the three bots
 
 BOT_ALLOCATIONS = {
-    "MACD":     0.33,
-    "RSI_VWAP": 0.33,
-    "CVD":      0.34,
+    "TREND_PULLBACK": 0.40,
+    "MACD":           0.20,
+    "RSI_VWAP":       0.20,
+    "CVD":            0.20,
 }
 
 # ── Universe ──────────────────────────────────────────────────────────────────
@@ -45,8 +46,15 @@ UNIVERSE_W_VOLUME              = _float("UNIVERSE_W_VOLUME", 0.20)
 UNIVERSE_EXCLUDE_BASES         = {"USDT", "USDC", "DAI", "EUR", "BUSD"}
 
 # ── Portfolio risk (cross-bot) ────────────────────────────────────────────────
-MAX_PORTFOLIO_POSITIONS = _int("MAX_PORTFOLIO_POSITIONS", 3)
+MAX_PORTFOLIO_POSITIONS = _int("MAX_PORTFOLIO_POSITIONS", 4)
 MAX_POSITIONS_PER_BOT   = _int("MAX_POSITIONS_PER_BOT", 1)
+
+# ── Trend Pullback strategy parameters ────────────────────────────────────────
+SUPERTREND_PERIOD        = _int("SUPERTREND_PERIOD", 10)
+SUPERTREND_MULTIPLIER    = _float("SUPERTREND_MULTIPLIER", 3.0)
+PULLBACK_RSI_MIN         = _float("PULLBACK_RSI_MIN", 40.0)
+PULLBACK_RSI_MAX         = _float("PULLBACK_RSI_MAX", 70.0)
+PULLBACK_REQUIRE_UPTREND = os.getenv("PULLBACK_REQUIRE_UPTREND", "true").lower() in ("1", "true", "yes")
 
 # ── MACD entry filters (relaxed defaults) ───────────────────────────────────
 MACD_VOL_MULT              = _float("MACD_VOL_MULT", 1.5)
@@ -64,9 +72,10 @@ MAX_DAILY_LOSS_PCT  = _float("MAX_DAILY_LOSS_PCT", 0.05)  # 5% — bot pauses if
 
 # ── Timeframes ────────────────────────────────────────────────────────────────
 TIMEFRAMES = {
-    "MACD":     "5m",
-    "RSI_VWAP": "1h",
-    "CVD":      "15m",
+    "TREND_PULLBACK": "15m",
+    "MACD":           "5m",
+    "RSI_VWAP":       "1h",
+    "CVD":            "15m",
 }
 
 # ── Exchange ──────────────────────────────────────────────────────────────────

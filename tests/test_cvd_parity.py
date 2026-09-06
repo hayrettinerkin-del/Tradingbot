@@ -17,12 +17,16 @@ class TestCVDParity(unittest.TestCase):
 
     def _make_bars(self, n: int = 6) -> pd.DataFrame:
         idx = pd.date_range("2024-01-01", periods=n, freq="15min", tz="UTC")
+        opens  = [100.0, 99.0, 98.5, 98.0, 99.0, 100.0] * (n // 6 + 1)
+        highs  = [101.0, 99.5, 99.0, 98.5, 100.0, 101.0] * (n // 6 + 1)
+        lows   = [99.0,  98.0, 98.0, 97.5, 98.5,  99.5]  * (n // 6 + 1)
+        closes = [99.5,  98.5, 98.8, 98.2, 99.5, 100.5] * (n // 6 + 1)
         return pd.DataFrame(
             {
-                "open":   [100.0, 99.0, 98.5, 98.0, 99.0, 100.0],
-                "high":   [101.0, 99.5, 99.0, 98.5, 100.0, 101.0],
-                "low":    [99.0,  98.0, 98.0, 97.5, 98.5,  99.5],
-                "close":  [99.5,  98.5, 98.8, 98.2, 99.5, 100.5],
+                "open":   opens[:n],
+                "high":   highs[:n],
+                "low":    lows[:n],
+                "close":  closes[:n],
                 "volume": [1000.0] * n,
             },
             index=idx,

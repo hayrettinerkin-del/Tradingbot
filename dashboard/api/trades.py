@@ -125,7 +125,7 @@ async def get_portfolio():
 
     # Standalone fallback from CSV
     bot_stats = []
-    for name in ["MACD", "RSI_VWAP", "CVD"]:
+    for name in config.BOT_ALLOCATIONS.keys():
         bot_stats.append(_stats_from_rows(_read_csv(name), name))
     total_bal = sum(s["balance"] for s in bot_stats)
     total_pnl = sum(s["total_pnl"] for s in bot_stats)
@@ -162,7 +162,7 @@ async def get_stats():
 
     # Standalone — compute from CSV
     result = []
-    for name in ["MACD", "RSI_VWAP", "CVD"]:
+    for name in config.BOT_ALLOCATIONS.keys():
         result.append(_stats_from_rows(_read_csv(name), name))
     return result
 
@@ -170,6 +170,7 @@ async def get_stats():
 @router.get("/signals")
 async def get_signals(symbol: str = Query("BTC/USDT")):
     """Compute the current signal state for each bot on the requested symbol."""
+    from bot_trend_pullback import TrendPullbackBot
     from bot_macd import MACDBot
     from bot_rsi_vwap import RSIVWAPBot
     from bot_cvd import CVDBot
@@ -178,9 +179,10 @@ async def get_signals(symbol: str = Query("BTC/USDT")):
     results  = []
 
     bot_defs = [
-        ("MACD",     MACDBot,    config.TIMEFRAMES["MACD"],     300),
-        ("RSI_VWAP", RSIVWAPBot, config.TIMEFRAMES["RSI_VWAP"], 60),
-        ("CVD",      CVDBot,     config.TIMEFRAMES["CVD"],       300),
+        ("TREND_PULLBACK", TrendPullbackBot, config.TIMEFRAMES["TREND_PULLBACK"], 300),
+        ("MACD",           MACDBot,          config.TIMEFRAMES["MACD"],           300),
+        ("RSI_VWAP",       RSIVWAPBot,       config.TIMEFRAMES["RSI_VWAP"],       60),
+        ("CVD",            CVDBot,           config.TIMEFRAMES["CVD"],            300),
     ]
 
     for name, BotClass, tf, limit in bot_defs:

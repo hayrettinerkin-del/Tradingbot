@@ -4,9 +4,9 @@
 //  Constants
 // ═══════════════════════════════════════════════════════
 
-const BOT_COLORS = { MACD: '#3b82f6', RSI_VWAP: '#a855f7', CVD: '#f59e0b' };
-const BOT_LABELS = { MACD: 'M', RSI_VWAP: 'R', CVD: 'C' };
-const CARD_CLASS = { MACD: 'macd-card', RSI_VWAP: 'rsivwap-card', CVD: 'cvd-card' };
+const BOT_COLORS = { TREND_PULLBACK: '#10b981', MACD: '#3b82f6', RSI_VWAP: '#a855f7', CVD: '#f59e0b' };
+const BOT_LABELS = { TREND_PULLBACK: 'T', MACD: 'M', RSI_VWAP: 'R', CVD: 'C' };
+const CARD_CLASS = { TREND_PULLBACK: 'trend-card', MACD: 'macd-card', RSI_VWAP: 'rsivwap-card', CVD: 'cvd-card' };
 
 const BASE = '';  // same origin
 
@@ -46,7 +46,7 @@ const S = {
   livePrice:  null,
   livePrices: {},   // { 'BTC/USDT': 76000, 'SOL/USDT': 86 } — live price per symbol
   panels:    { macd: true, rsi: true, cvd: false },
-  botVis:    { MACD: true, RSI_VWAP: true, CVD: true },
+  botVis:    { TREND_PULLBACK: true, MACD: true, RSI_VWAP: true, CVD: true },
   view:      { start: 0, count: 120 },
   hover:     { active: false, x: 0, y: 0, idx: -1 },
   drag:      { on: false, startX: 0, startView: 0 },

@@ -22,6 +22,7 @@ def _make_bot(balance: float = 3_300.0):
     class ConcreteBot(BaseBot):
         name = "TEST"
         def run_once(self): pass
+        def _process_symbol(self, symbol): pass
 
     mock_exchange = MagicMock()
     with (

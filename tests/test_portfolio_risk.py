@@ -18,15 +18,17 @@ def _mock_bot(name: str, positions: dict | None = None):
 class TestPortfolioRisk(unittest.TestCase):
 
     def test_blocks_when_portfolio_full(self):
-        bots = [
-            _mock_bot("A", {"BTC/USDT": {}}),
-            _mock_bot("B", {"ETH/USDT": {}}),
-            _mock_bot("C", {"SOL/USDT": {}}),
-        ]
-        mgr = PortfolioRiskManager(lambda: bots)
-        ok, reason = mgr.can_open(bots[0], "BNB/USDT")
-        self.assertFalse(ok)
-        self.assertEqual(reason, "portfolio_max_positions")
+        with patch.object(config, "MAX_PORTFOLIO_POSITIONS", 3):
+            bots = [
+                _mock_bot("A", {"BTC/USDT": {}}),
+                _mock_bot("B", {"ETH/USDT": {}}),
+                _mock_bot("C", {"SOL/USDT": {}}),
+                _mock_bot("D"),
+            ]
+            mgr = PortfolioRiskManager(lambda: bots)
+            ok, reason = mgr.can_open(bots[3], "BNB/USDT")
+            self.assertFalse(ok)
+            self.assertEqual(reason, "portfolio_max_positions")
 
     def test_blocks_duplicate_symbol_across_bots(self):
         bots = [_mock_bot("A", {"BTC/USDT": {}}), _mock_bot("B")]

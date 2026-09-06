@@ -33,14 +33,18 @@ console = Console()
 
 def _make_strategy(name: str):
     """Instantiate a strategy bot by name (skips ccxt.load_markets call overhead)."""
-    from bot_macd     import MACDBot
-    from bot_rsi_vwap import RSIVWAPBot
-    from bot_cvd      import CVDBot
+    from bot_trend_pullback import TrendPullbackBot
+    from bot_macd           import MACDBot
+    from bot_rsi_vwap       import RSIVWAPBot
+    from bot_cvd            import CVDBot
 
     mapping = {
-        "macd":     MACDBot,
-        "rsi_vwap": RSIVWAPBot,
-        "cvd":      CVDBot,
+        "trend_pullback": TrendPullbackBot,
+        "supertrend":     TrendPullbackBot,
+        "trend":          TrendPullbackBot,
+        "macd":           MACDBot,
+        "rsi_vwap":       RSIVWAPBot,
+        "cvd":            CVDBot,
     }
     cls = mapping.get(name.lower())
     if cls is None:
@@ -193,13 +197,13 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument(
         "--strategy", "-s",
-        choices=["macd", "rsi_vwap", "cvd"],
+        choices=["trend_pullback", "supertrend", "macd", "rsi_vwap", "cvd"],
         help="Strategy to backtest (ignored when --all is set)",
     )
     p.add_argument(
         "--all", "-a",
         action="store_true",
-        help="Run all three strategies and generate comparison report",
+        help="Run all strategies and generate comparison report",
     )
     p.add_argument("--symbol",  default="BTC/USDT", help="Trading pair (default: BTC/USDT)")
     p.add_argument("--start",   required=True,       help="Start date YYYY-MM-DD")
@@ -229,7 +233,7 @@ def main() -> None:
         parser.error("Specify --strategy or --all.")
 
     strategies = (
-        ["macd", "rsi_vwap", "cvd"] if args.all
+        ["trend_pullback", "macd", "rsi_vwap", "cvd"] if args.all
         else [args.strategy]
     )
 

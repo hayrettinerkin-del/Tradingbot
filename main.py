@@ -22,9 +22,10 @@ from rich.table import Table
 from rich import box
 
 import config
-from bot_macd          import MACDBot
-from bot_rsi_vwap      import RSIVWAPBot
-from bot_cvd           import CVDBot
+from bot_trend_pullback import TrendPullbackBot
+from bot_macd           import MACDBot
+from bot_rsi_vwap       import RSIVWAPBot
+from bot_cvd            import CVDBot
 from portfolio         import portfolio_summary
 from portfolio_risk    import PortfolioRiskManager
 from terminal_dashboard import Dashboard
@@ -220,7 +221,7 @@ def main() -> None:
     assert config.PAPER_TRADING, "Set PAPER_TRADING=True before running."
 
     console.print("[bold green]Initialising bots…[/bold green]")
-    bots = [MACDBot(), RSIVWAPBot(), CVDBot()]
+    bots = [TrendPullbackBot(), MACDBot(), RSIVWAPBot(), CVDBot()]
 
     portfolio_risk = PortfolioRiskManager(lambda: bots)
     universe: UniverseManager | None = None
